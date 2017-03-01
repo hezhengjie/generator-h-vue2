@@ -1,0 +1,68 @@
+.borderline(@color){
+    position: relative;
+    &:before {
+        border: 1px solid @color;
+        .border-style();
+    }
+}
+.borderline(@color, @radius) when (isnumber(@radius)) {
+    position: relative;
+    &:before {
+        border: 1px solid @color;
+        border-radius: unit(@radius * 2, px);
+        .border-style();
+    }
+}
+.borderline(@color, bottom){
+    position: relative;
+    &:before {
+        border-bottom: 1px solid @color;
+        .border-style();
+    }
+}
+.borderline(@color, top){
+    position: relative;
+    &:before {
+        border-top: 1px solid @color;
+        .border-style();
+    }
+}
+.borderline(@color, left){
+    position: relative;
+    &:before {
+        border-left: 1px solid @color;
+        .border-style();
+    }
+}
+.borderline(@color, right){
+    position: relative;
+    &:before {
+        border-right: 1px solid @color;
+        .border-style();
+        
+    }
+}
+.borderline(@color, vertical){
+    position: relative;
+    &:before {
+        border-top: 1px solid @color;
+        border-bottom: 1px solid @color;
+        .border-style();
+        
+    }
+}
+.border-style(){
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    height: 200%;
+    -webkit-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 9
+}

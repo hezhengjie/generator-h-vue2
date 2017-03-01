@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "build": "gulp webpack",
+        "postpublish": ""
+    },
+    "dist": "./dist",
+    "output": "./html",
+    "urlPrefix": "./dist/",
+    "env": "alpha"
+}
