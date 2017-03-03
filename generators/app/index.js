@@ -84,6 +84,11 @@ module.exports = yeoman.Base.extend({
                 this.pkg.keywords = _.uniq(this.props.keywords.concat(this.pkg.keywords))
             }
             this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
+        },
+        file:function(){
+            this.copy('.babelrc','.babelrc');
+            this.copy('.gitignore','.gitignore');
+            this.copy('.npmignore','.npmignore');
         }
 
     },
