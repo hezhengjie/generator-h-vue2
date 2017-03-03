@@ -1,5 +1,5 @@
 {
-  "name": "@gfe/generator-gfe-h-vue",
+  "name": "generator-gfe-h-vue",
   "version": "0.1.2",
   "description": "vue2+webpack2 generator",
   "main": "index.js",
