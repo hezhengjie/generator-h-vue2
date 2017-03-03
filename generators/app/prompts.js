@@ -7,7 +7,6 @@ const path = require('path')
 const util = require('./util')
 
 module.exports = function (self){
-
     return [
         {
             type: 'input',
@@ -16,21 +15,25 @@ module.exports = function (self){
             default: path.basename(process.cwd())
         },
         {
+            type: 'input',
             name: 'version',
             default: '0.1.0',
             message: 'version'
         },
         {
+            type: 'input',
             name: 'description',
             default: 'general GB peon f2e project',
             message: 'description'
         },
         {
+            type: 'input',
             name: 'repo',
             default: util.getGitOrigin(),
             message: 'git repository'
         },
         {
+            type: 'input',
             name: 'keywords',
             default: 'gfe  project',
             message: 'keywords',
@@ -39,11 +42,13 @@ module.exports = function (self){
             }
         },
         {
+            type: 'input',
             name: 'author',
             default: self.user.git.name(),
             message: 'author'
         },
         {
+            type: 'input',
             name: 'email',
             default: self.user.git.email(),
             message: 'E-Mail'

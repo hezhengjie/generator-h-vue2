@@ -1,24 +1,21 @@
 {
-  "name": "@gfe/test",
-  "description": "general GB peon f2e project",
+  "name": "test",
+  "description": "general f2e project",
   "repository": {
     "type": "git",
     "url": ""
   },
   "author": {
     "name": "hezhengjie",
-    "email": "hezhengjie@meituan.com"
+    "email": "hzj727792893@gmail.com"
   },
   "keywords": [
-    "peon-static"
+    "static"
   ],
   "dependencies": {
-    "@dp/mbase-style": "^1.1.21",
-    "@dp/util-m-share": "^3.1.3",
+    "superagent": "^3.4.1",
     "babel-runtime": "^6.0.0",
     "es6-promise": "^3.2.1",
-    "fetch-jsonp": "^1.0.2",
-    "mockjs":"^1.0.0",
     "vue": "^2.1.10"
   },
   "devDependencies": {
@@ -26,8 +23,8 @@
     "babel-loader": "^6.0.0",
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
-    "babel-preset-stage-2": "^6.0.0",
     "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-stage-2": "^6.0.0",
     "cross-env": "^1.0.6",
     "css-loader": "^0.23.1",
     "del": "^2.2.0",
@@ -35,26 +32,30 @@
     "file-loader": "^0.8.4",
     "gulp": "^3.9.1",
     "json-loader": "^0.5.4",
+    "json-server": "^0.9.5",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "mockjs": "^1.0.0",
     "open": "0.0.5",
-    "vue-loader": "^11.1.0",
-    "vue-template-compiler": "^2.1.10",
+    "postcss-loader": "^0.9.1",
     "run-sequence": "^1.2.1",
+    "style-loader": "^0.13.1",
     "underscore": "^1.8.3",
     "url-loader": "^0.5.7",
     "vue-hot-reload-api": "^2.0.9",
     "vue-html-loader": "^1.0.0",
+    "vue-loader": "^11.1.0",
     "vue-style-loader": "^1.0.0",
+    "vue-template-compiler": "^2.1.10",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.0",
     "webpack-shell-plugin": "^0.4.2",
-    "windstorm": "~1.0.3",
-    "postcss-loader": "^0.9.1",
-    "style-loader": "^0.13.1"
+    "windstorm": "~1.0.3"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "mock": "node jsonServer.js",
+    "dev": "node server.js & node jsonServer.js"
   },
   "config": {
     "unsafe-perm": true

@@ -1,37 +1,98 @@
 /**
  * Created by hugh on 17/3/1.
  */
-var path = require('path');
-var chalk = require('chalk');    //不同颜色的info
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');    //yeoman弹出框
-var Vuepackage = yeoman.Base.extend({
-    info: function() {
-        this.log(chalk.green(
-            'I am going to build your app!'
-        ));
+'use strict'
+const yeoman = require('yeoman-generator')
+const path = require('path')
+const fs = require('fs')
+const chalk = require('chalk')
+const _ = require('lodash')
+const extend = require('deep-extend')
+const mkdirp = require('mkdirp')
+const selfupdate = require('selfupdate')
+const packageJSON = require('../../package.json')
+const notifier = require('node-notifier')
+const util = require('./util')
+
+
+module.exports = yeoman.Base.extend({
+    initializing() {
+        this.props ={}
+        //tip for update this generator
+        try{
+            selfupdate.isUpdated(packageJSON, (error, isUpdated) => {
+                if (error) throw error
+                if (isUpdated) return
+                    notifier.notify({
+                        title: '@gfe/generator-h-vue2',
+                        subtitle: '已有新版本,正在更新...',
+                        message: '如果更新失败，请手动更新\n执行 npm i -g @gfe/generator-h-vue2',
+                        contentImage: path.resolve(__dirname, 'peon.gif'),
+                        sound: true,
+                        wait: true
+                    })
+                selfupdate.update(packageJSON, (error, version) => {
+                if (error) throw error
+                notifier.notify({
+                title: '@gfe/generator-h-vue2',
+                subtitle: '更新完毕',
+                message: '请重新运行本应用\n执行 yo @gfe/generator-h-vue2',
+                sound: true,
+                wait: true
+            })
+        })
+        })
+        } catch(ex) {
+            console.log(ex)
+        }
     },
-    generateBasic: function() {  //按照自己的templates目录自定义
-        this.directory('src', 'src');    //拷贝目录
-        this.directory('data', 'data');
-        this.copy('package.json', 'package.json');   //拷贝文件
-        this.copy('index.html', 'index.html');
-        this.copy('README.md', 'README.md');
-        this.copy('webpack.config.js', 'webpack.config.js');
+    prompting(){
+        const done = this.async()
+        var prompts = require('./prompts')(this)
+        this.prompt(prompts).then((props) => {
+            this.props = props;
+            done()
+    })
     },
-    generateClient: function() {
-        this.sourceRoot(path.join(__dirname, 'templates'));
-        this.destinationPath('./');
+    writing: {
+        //copy template files
+        directories: function (){
+            this.fs.copy(this.templatePath('./') + "/**/*.*", this.destinationPath('./'));
+        },
+
+        package_json: function () {
+            const currentPkg = this.fs.readJSON('package.json', {})
+            this.pkg = extend(currentPkg, {
+                name: this.props.name,
+                version: this.props.version,
+                description: this.props.description,
+                repository: {
+                    type: 'git',
+                    url: this.props.repo
+                },
+                author: {
+                    name: this.props.author,
+                    email: this.props.email
+                },
+                keywords: [],
+                bugs: {
+                    url: 'http://' + util.getHomeUrl(this.props.repo) + '/issues'
+                },
+                homepage: 'http://' + util.getHomeUrl(this.props.repo)
+            });
+            if (this.props.keywords) {
+                this.pkg.keywords = _.uniq(this.props.keywords.concat(this.pkg.keywords))
+            }
+            this.fs.writeJSON(this.destinationPath('package.json'), this.pkg);
+        }
+
     },
-    install: function() {      //安装依赖
-        this.installDependencies({
-            skipInstall: this.options['skip-install']
-        });
-    },
-    end: function() {
-        this.log(yosay(
-            'Your app has been created successfully!'
-        ));
+    install:function() {
+        let opt={
+            cwd:this.destinationPath('./')
+        };
+        this.spawnCommandSync('npm', ['install'],opt)
+        this.spawnCommandSync('webpack', [],opt)
+        this.spawnCommandSync('npm', ['start'],opt)
     }
 });
-module.exports = Vuepackage;

@@ -1,6 +1,6 @@
 {
-  "name": "generator-h-vue2",
-  "version": "0.1.0",
+  "name": "@gfe/generator-gfe-h-vue",
+  "version": "0.1.2",
   "description": "vue2+webpack2 generator",
   "main": "index.js",
   "repository": {
@@ -19,8 +19,17 @@
   "dependencies": {
     "chai": "^3.3.0",
     "chalk": "^1.1.1",
-    "fs-extra": "^0.24.0",
+    "deep-extend": "^0.4.1",
+    "fs": "0.0.1-security",
+    "generator-license": "^3.1.1",
+    "generator-node": "^1.10.0",
+    "inquirer-npm-name": "^1.0.0",
+    "lodash": "^4.11.1",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.3.3",
+    "needle": "^1.0.0",
+    "node-notifier": "^4.5.0",
+    "selfupdate": "^1.1.0",
     "yeoman-generator": "^0.24.1",
     "yosay": "^1.0.5"
   }
