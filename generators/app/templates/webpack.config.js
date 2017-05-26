@@ -71,6 +71,7 @@ module.exports = {
     historyApiFallback: false,
     noInfo: true,
     hot: true,
+      disableHostCheck: true,
     contentBase: f2eci.output,
     publicPath: '/',
     stats:{
