@@ -22,6 +22,17 @@ let Tool = {
     },
 
     /*
+     返回
+     */
+    back(){
+        if(history.length>1){
+            history.back();
+        }
+        else{
+            KNB.closeWebview({});
+        }
+    },
+    /*
       跳转（app和h5）
      */
     jump(url,notitlebar){
