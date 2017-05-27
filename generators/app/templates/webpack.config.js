@@ -8,7 +8,6 @@ var env = require("./f2eci").env;
 var fs = require('fs');
 var entryDir = path.resolve(__dirname, './src/entry/');
 let entrys = {};
-
 try {
     entrys = {};
     fs.readdirSync(entryDir).map(filename=> {
@@ -29,9 +28,9 @@ module.exports = {
     chunkFilename: '[name].[chunkhash].js',
     filename: '[name].js'
   },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules')
-  },
+  // resolveLoader: {
+  //   root: path.join(__dirname, 'node_modules')
+  // },
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.common.js',
@@ -42,41 +41,70 @@ module.exports = {
     }
   },
   module: {
-    loaders: [
-      {
-        test: /\.vue$/,
-        loader: 'vue'
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
-      },
-      {
-        test: /\.html$/,
-        loader: 'vue-html'
-      },
-      {
-          test: /\.less$/,
-          loader: env == "alpha" ? "style!css!postcss!less" : ExtractTextPlugin.extract('css!postcss!less')
-      },
-      {
-          test: /\.css$/,
-          loader: env == "alpha" ? "style!css!postcss!less" : ExtractTextPlugin.extract('css!postcss!less')
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: ["url?limit=25000"]
-      }
-    ]
+      rules: [
+          {
+              test: /\.vue$/,
+              use: [{
+                  loader: "vue-loader"
+              }]
+          },
+          {
+              test: /\.js$/,
+              use: [{
+                  loader: "babel-loader"
+              }],
+              exclude: [/node_modules/]
+          },
+          {
+              test: /\.json$/,
+              use: [
+                  {
+                      loader:"json-loader"
+                  }]
+          },
+          {
+              test: /\.html$/,
+              use: [{
+                  loader:"vue-html-loader"
+              }]
+          },
+          {
+              test: /\.css$/,
+              use: env == "alpha" ?["style-loader","css-loader?minimize","postcss-loader","less-loader"]:ExtractTextPlugin.extract({
+                  use: ["css-loader?minimize","postcss-loader","less-loader"]
+              })
+          },
+          {
+              test: /\.less$/,
+              use: env == "alpha" ?["style-loader","css-loader?minimize","postcss-loader","less-loader"]:ExtractTextPlugin.extract({
+                                      use: ["css-loader?minimize","postcss-loader","less-loader"]})
+          },
+          {
+              test: /\.(jpe?g|png|gif|svg)$/i,
+              use: [{
+                  loader: "url-loader",
+                  options: {
+                      limit: 25000,
+                      name: 'images/[name].[hash:7].[ext]'    // 将图片都放入images文件夹下，[hash:7]防缓存
+                  }
+              }]
+          },
+          {
+              test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+              use: [{
+                  loader: "url-loader",
+                  options: {
+                      limit: 10000,
+                      name: 'fonts/[name].[hash:7].[ext]'    // 将字体放入fonts文件夹下
+                  }
+              }]
+          }
+          ]
   },
   plugins: [
     new WebpackShellPlugin({onBuildStart: ['gulp']}),
-    new ExtractTextPlugin("[name].css", {
+    new ExtractTextPlugin({
+        filename:"[name].css",
         disable: env == "alpha",
         allChunks: true
     }),

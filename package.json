@@ -1,6 +1,6 @@
 {
   "name": "generator-gfe-h-vue",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "vue2+webpack2 generator",
   "main": "index.js",
   "repository": {
