@@ -5,22 +5,40 @@ var relativeToRootPath = ".";
 var WebpackShellPlugin = require('webpack-shell-plugin');
 var f2eci = require("./f2eci");
 var env = require("./f2eci").env;
+var fs = require('fs');
+var entryDir = path.resolve(__dirname, './src/entry/');
+let entrys = {};
+
+try {
+    entrys = {};
+    fs.readdirSync(entryDir).map(filename=> {
+        if (path.extname(filename) !== '.js') return;
+        let basename = path.basename(filename, path.extname(filename));
+        entrys[basename] = [path.resolve(entryDir,`${filename}`)]
+    });
+    entrys=Object.assign(entrys,{
+    });
+} catch (e) {
+    console.error("读取入口文件失败", e)
+}
 module.exports = {
-  entry: {
-    'build': ['./src/main.js']
-  },
+  entry:entrys,
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: env == 'alpha' ? './' : f2eci["urlPrefix"],
     chunkFilename: '[name].[chunkhash].js',
-    filename: 'build.js'
+    filename: '[name].js'
   },
   resolveLoader: {
     root: path.join(__dirname, 'node_modules')
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.common.js'
+      'vue$': 'vue/dist/vue.common.js',
+        'src': path.resolve(__dirname, './src'),
+        'static': path.resolve(__dirname, './src/static'),
+        'api': path.resolve(__dirname, './src/api'),
+        'components': path.resolve(__dirname, './src/components')
     }
   },
   module: {
@@ -57,7 +75,6 @@ module.exports = {
     ]
   },
   plugins: [
-
     new WebpackShellPlugin({onBuildStart: ['gulp']}),
     new ExtractTextPlugin("[name].css", {
         disable: env == "alpha",
